@@ -1,7 +1,7 @@
 const express = require("express");
-const userRouter = require("./users/users-router");
 const { logger } = require("./middleware/middleware");
 const cors = require("cors");
+const userRouter = require("./users/users-router");
 
 const server = express();
 

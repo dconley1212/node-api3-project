@@ -1,4 +1,4 @@
-const { getById, insert } = require("../users/users-model");
+const { getById } = require("../users/users-model");
 
 function logger(req, res, next) {
   console.log(`[${req.method}] ${req.url}`);
@@ -11,7 +11,7 @@ function validateUserId(req, res, next) {
   getById(id)
     .then((user) => {
       if (user) {
-        res.json(user);
+        req.user = user;
         next();
       } else {
         next({ status: 404, message: "user not found" });

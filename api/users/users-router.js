@@ -15,13 +15,16 @@ const router = express.Router();
 router.get("/", (req, res, next) => {
   // RETURN AN ARRAY WITH ALL THE USERS
   Users.get()
-    .then((users) => res.status(200).json(users))
+    .then((users) => {
+      res.status(200).json(users);
+    })
     .catch(next);
 });
 
 router.get("/:id", validateUserId, (req, res) => {
   // RETURN THE USER OBJECT
   // this needs a middleware to verify user id
+  res.json(req.user);
 });
 
 router.post("/", validateUser, (req, res) => {
@@ -32,10 +35,16 @@ router.post("/", validateUser, (req, res) => {
   });
 });
 
-router.put("/:id", validateUserId, (req, res) => {
+router.put("/:id", validateUserId, validateUser, (req, res, next) => {
   // RETURN THE FRESHLY UPDATED USER OBJECT
   // this needs a middleware to verify user id
   // and another middleware to check that the request body is valid
+  Users.update(req.params.id, req.body)
+    .then((user) => {
+      console.log(user);
+      res.status(200).json(user);
+    })
+    .catch(next);
 });
 
 router.delete("/:id", validateUserId, (req, res) => {
